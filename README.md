@@ -80,24 +80,22 @@ Pin assignments below match xc3sprog's `matrix_creator` cable and the [LinuxJedi
 ASCII fallback (handy if you're SSH'd in and need to glance at the layout):
 
 ```
-Pi 40-pin GPIO header (top view, USB-C end up)         C64U P5 JTAG (10-pin 2x5)
-                                                       
- ┌─── 1: 3.3V    [ ][2 ]: 5V              ┌─── 1: TCK ◄───┐ ┌─── 2: GND ◄───┐
- │    3: GPIO2   [ ][4 ]: 5V              │    3: TDO ◄─┐ │ │    4: 3.3V (no!)│
- │    5: GPIO3   [ ][6 ]: GND             │    5: TMS ◄┐│ │ │    6: N/C      │
- │ ●  7: GPIO4   [▪][8 ]: GPIO14   TMS ──►│      ┌─────┘│ │ │    8: N/C      │
- │ ●  9: GND     [▪][10]: GPIO15   GND ──►│  ┌───│──────│─┘ │   10: GND      │
- │ ● 11: GPIO17  [▪][12]: GPIO18   TCK ──►│  │   │      │   │
- │ ● 13: GPIO27  [▪][14]: GND      TDO ──►│  │   │      │   │
- │ ● 15: GPIO22  [▪][16]: GPIO23   TDI ──►│  │   │      │   │
- │   17: 3.3V    [ ][18]: GPIO24           │  │   │      │   │
- │   ⋮       (pins 19..40 unused)          │  │   │      │   │
- └─── ...                                  └──│───│──────│───┘
-                                              │   │      │
-                                              ▼   ▼      ▼
-                                  to C64U P5: 1   3      5  (and 9 for TDI, 2/10 for GND)
+  Pi 40-pin GPIO header   ──── one wire each ────►   C64U P5 JTAG header
 
-  ●▪ = used pins on Pi side
+  Pi pin │ BCM     │ signal        colour          P5 pin │ signal
+  ───────┼─────────┼──────────────────────         ───────┼─────────
+   ● 7   │ GPIO 4  │  TMS  ────────  blue   ────►    5    │ TMS
+   ● 9   │ GND     │  GND  - - - -   grey   - - ►    2    │ GND   (or pin 10)
+   ● 11  │ GPIO 17 │  TCK  ────────  red    ────►    1    │ TCK
+   ● 13  │ GPIO 27 │  TDO  ────────  orange ────►    3    │ TDO
+   ● 15  │ GPIO 22 │  TDI  ────────  green  ────►    9    │ TDI
+
+  ⚠ Pi pins 1 / 17 (3.3V)  ✗  P5 pin 4 (3.3V) — DO NOT CONNECT
+     Connecting these back-feeds the C64U from the Pi's 3.3V rail.
+
+  Pi GND: pin 9 is the closest, but any of 6 / 14 / 20 / 25 / 30 / 34 / 39 works.
+  P5 GND: pin 2 or pin 10 — either one is enough, no need to wire both.
+  P5 pins 6, 7, 8 are not connected on the C64U side.
 ```
 
 ⚠️ **Do not connect 3.3V** — the C64U powers its JTAG side from its own PSU. Connecting Pi 3.3V to the C64U's 3.3V rail back-feeds the C64U from the Pi.

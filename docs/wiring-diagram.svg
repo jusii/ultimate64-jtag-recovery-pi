@@ -1,185 +1,365 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 760" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1020" font-family="Helvetica, Arial, sans-serif">
   <style>
+    text { fill: #222; }
     .title { font-size: 22px; font-weight: 700; }
-    .subtitle { font-size: 14px; fill: #555; }
-    .pin-num { font-size: 10px; fill: #333; text-anchor: middle; }
-    .pin-fn  { font-size: 11px; fill: #444; }
-    .pin-fn-bold { font-size: 11px; font-weight: 700; }
-    .signal-tck { fill: #d62728; }
-    .signal-tms { fill: #1f77b4; }
-    .signal-tdi { fill: #2ca02c; }
-    .signal-tdo { fill: #ff7f0e; }
-    .signal-gnd { fill: #555; }
-    .header-box { fill: #fff; stroke: #222; stroke-width: 2; }
-    .pin-circle { fill: #fff; stroke: #444; stroke-width: 1; }
-    .pin-power { fill: #ffe2a8; stroke: #d4a35d; }
-    .pin-gnd { fill: #888; stroke: #444; }
-    .pin-used { stroke-width: 2; }
-    .wire-tck { stroke: #d62728; stroke-width: 2.5; fill: none; }
-    .wire-tms { stroke: #1f77b4; stroke-width: 2.5; fill: none; }
-    .wire-tdi { stroke: #2ca02c; stroke-width: 2.5; fill: none; }
-    .wire-tdo { stroke: #ff7f0e; stroke-width: 2.5; fill: none; }
-    .wire-gnd { stroke: #555;    stroke-width: 2.5; fill: none; stroke-dasharray: 5,3; }
+    .subtitle { font-size: 13px; fill: #555; }
+    .section-title { font-size: 16px; font-weight: 700; fill: #222; }
+    .h-sub { font-size: 11px; fill: #666; }
+
+    .pin-num { font-size: 10px; fill: #333; font-family: "DejaVu Sans Mono", monospace; }
+    .pin-label { font-size: 10px; fill: #333; font-family: "DejaVu Sans Mono", monospace; }
+    .pin-label-bold { font-size: 11px; fill: #111; font-family: "DejaVu Sans Mono", monospace; font-weight: 700; }
+
+    .c-tck { fill: #d62728; }
+    .c-tms { fill: #1f77b4; }
+    .c-tdi { fill: #2ca02c; }
+    .c-tdo { fill: #ff7f0e; }
+    .c-gnd { fill: #555; }
+
+    .pcb { fill: #1f4d2a; stroke: #0d2010; stroke-width: 1; }
+    .header-body { fill: #1a1a1a; stroke: #000; stroke-width: 0.8; }
+
+    .pin-pad { fill: #d4a533; stroke: #6e500f; stroke-width: 0.5; }
+    .pin-pad-power { fill: #ffd97a; stroke: #b3801c; stroke-width: 0.6; }
+    .pin-pad-gnd { fill: #6a6a6a; stroke: #2a2a2a; stroke-width: 0.6; }
+    .pin-used-tck { fill: #d62728; stroke: #5a0d0d; stroke-width: 1; }
+    .pin-used-tms { fill: #1f77b4; stroke: #0a3852; stroke-width: 1; }
+    .pin-used-tdi { fill: #2ca02c; stroke: #134c14; stroke-width: 1; }
+    .pin-used-tdo { fill: #ff7f0e; stroke: #7a3a00; stroke-width: 1; }
+    .pin-used-gnd { fill: #888; stroke: #2a2a2a; stroke-width: 1; }
+
+    .row-bg { fill: #f7f7f7; stroke: none; }
+    .row-bg-used-tms { fill: #eaf2fa; stroke: none; }
+    .row-bg-used-gnd { fill: #ececec; stroke: none; }
+    .row-bg-used-tck { fill: #faeaea; stroke: none; }
+    .row-bg-used-tdo { fill: #fff0e0; stroke: none; }
+    .row-bg-used-tdi { fill: #eaf6ec; stroke: none; }
+    .row-bg-warn { fill: #fdedef; stroke: #c0392b; stroke-width: 1; stroke-dasharray: 4,3; }
+
+    .wire-tck { stroke: #d62728; stroke-width: 4; fill: none; stroke-linecap: round; }
+    .wire-tms { stroke: #1f77b4; stroke-width: 4; fill: none; stroke-linecap: round; }
+    .wire-tdi { stroke: #2ca02c; stroke-width: 4; fill: none; stroke-linecap: round; }
+    .wire-tdo { stroke: #ff7f0e; stroke-width: 4; fill: none; stroke-linecap: round; }
+    .wire-gnd { stroke: #555;    stroke-width: 4; fill: none; stroke-linecap: round; stroke-dasharray: 8,4; }
+
     .legend-text { font-size: 12px; fill: #333; }
-    .warn { font-size: 12px; fill: #c00; font-weight: 700; }
-    .note { font-size: 12px; fill: #555; }
+    .warn { font-size: 12px; fill: #c0392b; font-weight: 700; }
+    .note { font-size: 11px; fill: #555; }
   </style>
 
-  <!-- Title -->
-  <text x="550" y="32" class="title" text-anchor="middle">Raspberry Pi GPIO ↔ Commodore 64 Ultimate / Ultimate 64 Elite II (P5 JTAG header)</text>
+  <defs>
+    <marker id="ah-tck" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#d62728"/>
+    </marker>
+    <marker id="ah-tms" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#1f77b4"/>
+    </marker>
+    <marker id="ah-tdi" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#2ca02c"/>
+    </marker>
+    <marker id="ah-tdo" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#ff7f0e"/>
+    </marker>
+    <marker id="ah-gnd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- ========== TITLE ========== -->
+  <text x="550" y="32" class="title" text-anchor="middle">Raspberry Pi GPIO ↔ Commodore 64 Ultimate / Ultimate 64 Elite II (P5 JTAG)</text>
   <text x="550" y="54" class="subtitle" text-anchor="middle">Pin assignments match xc3sprog matrix_creator / gpiod_creator / LinuxJedi 2025 Pi-JTAG layout</text>
 
-  <!-- ============== Pi GPIO 40-pin header ============== -->
-  <g transform="translate(60, 100)">
-    <text x="180" y="-10" class="title" text-anchor="middle" font-size="16px">Raspberry Pi (40-pin GPIO header)</text>
+  <!-- =================== TOP: realistic header references =================== -->
 
-    <!-- Header outline -->
-    <rect x="20" y="0" width="320" height="600" class="header-box" rx="6"/>
+  <!-- ========== Pi 40-pin GPIO header (left) ========== -->
+  <text x="220" y="86" class="section-title" text-anchor="middle">Raspberry Pi (40-pin GPIO)</text>
+  <text x="220" y="102" class="h-sub" text-anchor="middle">P1 — pin 1 marked ▼ ; viewed from above</text>
 
-    <!-- Pin layout: 2 columns x 20 rows; left column = odd pins, right = even pins -->
-    <!-- Each row: y = 14 + (row-1)*30; pin diameter = 18 -->
+  <!-- PCB substrate (narrow — just frames the strip; labels live on white) -->
+  <rect x="190" y="110" width="60" height="380" rx="3" class="pcb"/>
+  <!-- Header plastic strip (narrow inner column) -->
+  <rect x="200" y="118" width="40" height="364" rx="2" class="header-body"/>
+  <!-- Pin 1 marker -->
+  <polygon points="194,118 200,124 194,130" fill="#fff"/>
+  <text x="180" y="125" class="pin-num" text-anchor="end" fill="#fff" font-weight="700">1</text>
 
-    <!-- Helper macro: we hand-draw all 40 pins with labels. -->
+  <!-- Pi pins — 2 cols × 20 rows. Pitch 17 px. Row1 y=128, Row20 y=128+19*17=451.
+       Col1 (odd pins) cx=212, Col2 (even pins) cx=228. -->
 
-    <!-- Row 1: Pin 1 (3.3V), Pin 2 (5V) -->
-    <circle cx="60" cy="20" r="9" class="pin-circle pin-power"/><text x="60" y="24" class="pin-num">1</text>
-    <text x="78" y="24" class="pin-fn">3.3V</text>
-    <circle cx="280" cy="20" r="9" class="pin-circle pin-power"/><text x="280" y="24" class="pin-num">2</text>
-    <text x="220" y="24" class="pin-fn" text-anchor="end">5V</text>
+  <!-- Background row tints for used pins (full width across the pin-info zone) -->
+  <rect x="60"  y="178" width="320" height="16" class="row-bg-used-tms"/>  <!-- pin 7 row -->
+  <rect x="60"  y="195" width="320" height="16" class="row-bg-used-gnd"/>  <!-- pin 9 row -->
+  <rect x="60"  y="212" width="320" height="16" class="row-bg-used-tck"/>  <!-- pin 11 row -->
+  <rect x="60"  y="229" width="320" height="16" class="row-bg-used-tdo"/>  <!-- pin 13 row -->
+  <rect x="60"  y="246" width="320" height="16" class="row-bg-used-tdi"/>  <!-- pin 15 row -->
 
-    <!-- Row 2: Pin 3 (SDA), Pin 4 (5V) -->
-    <circle cx="60" cy="50" r="9" class="pin-circle"/><text x="60" y="54" class="pin-num">3</text>
-    <text x="78" y="54" class="pin-fn">GPIO2 / SDA</text>
-    <circle cx="280" cy="50" r="9" class="pin-circle pin-power"/><text x="280" y="54" class="pin-num">4</text>
-    <text x="220" y="54" class="pin-fn" text-anchor="end">5V</text>
+  <!-- Pin pads + outside labels per row -->
+  <!-- Row 1: pin 1 (3V3) / pin 2 (5V) -->
+  <rect x="208" y="124" width="8" height="8" class="pin-pad-power"/>
+  <text x="195" y="132" class="pin-num" text-anchor="end">1</text>
+  <text x="190" y="132" class="pin-label" text-anchor="end">3V3</text>
+  <rect x="224" y="124" width="8" height="8" class="pin-pad-power"/>
+  <text x="252" y="132" class="pin-num" text-anchor="start">2</text>
+  <text x="270" y="132" class="pin-label" text-anchor="start">5V</text>
 
-    <!-- Row 3: Pin 5 (SCL), Pin 6 (GND) -->
-    <circle cx="60" cy="80" r="9" class="pin-circle"/><text x="60" y="84" class="pin-num">5</text>
-    <text x="78" y="84" class="pin-fn">GPIO3 / SCL</text>
-    <circle cx="280" cy="80" r="9" class="pin-circle pin-gnd"/><text x="280" y="84" class="pin-num" fill="#fff">6</text>
-    <text x="220" y="84" class="pin-fn" text-anchor="end">GND</text>
+  <!-- Row 2: 3 (GPIO2) / 4 (5V) -->
+  <rect x="208" y="141" width="8" height="8" class="pin-pad"/>
+  <text x="195" y="149" class="pin-num" text-anchor="end">3</text>
+  <text x="190" y="149" class="pin-label" text-anchor="end">GPIO 2</text>
+  <rect x="224" y="141" width="8" height="8" class="pin-pad-power"/>
+  <text x="252" y="149" class="pin-num" text-anchor="start">4</text>
+  <text x="270" y="149" class="pin-label" text-anchor="start">5V</text>
 
-    <!-- Row 4: Pin 7 (GPIO4 ← TMS) — USED, Pin 8 (GPIO14) -->
-    <circle cx="60" cy="110" r="11" class="pin-circle pin-used signal-tms"/><text x="60" y="114" class="pin-num" fill="#fff">7</text>
-    <text x="78" y="114" class="pin-fn-bold signal-tms">GPIO 4   ◄── TMS</text>
-    <circle cx="280" cy="110" r="9" class="pin-circle"/><text x="280" y="114" class="pin-num">8</text>
-    <text x="220" y="114" class="pin-fn" text-anchor="end">GPIO14 / TXD</text>
+  <!-- Row 3: 5 (GPIO3) / 6 (GND) -->
+  <rect x="208" y="158" width="8" height="8" class="pin-pad"/>
+  <text x="195" y="166" class="pin-num" text-anchor="end">5</text>
+  <text x="190" y="166" class="pin-label" text-anchor="end">GPIO 3</text>
+  <rect x="224" y="158" width="8" height="8" class="pin-pad-gnd"/>
+  <text x="252" y="166" class="pin-num" text-anchor="start">6</text>
+  <text x="270" y="166" class="pin-label" text-anchor="start">GND</text>
 
-    <!-- Row 5: Pin 9 (GND) — USED for GND, Pin 10 (GPIO15) -->
-    <circle cx="60" cy="140" r="11" class="pin-circle pin-used pin-gnd"/><text x="60" y="144" class="pin-num" fill="#fff">9</text>
-    <text x="78" y="144" class="pin-fn-bold signal-gnd">GND      ◄── GND</text>
-    <circle cx="280" cy="140" r="9" class="pin-circle"/><text x="280" y="144" class="pin-num">10</text>
-    <text x="220" y="144" class="pin-fn" text-anchor="end">GPIO15 / RXD</text>
+  <!-- Row 4: 7 (GPIO4 → TMS, USED) / 8 (GPIO14) -->
+  <rect x="206" y="173" width="12" height="12" class="pin-used-tms" rx="1"/>
+  <text x="195" y="184" class="pin-num c-tms" text-anchor="end" font-weight="700">7</text>
+  <text x="190" y="184" class="pin-label-bold c-tms" text-anchor="end">GPIO 4 — TMS</text>
+  <rect x="224" y="175" width="8" height="8" class="pin-pad"/>
+  <text x="252" y="184" class="pin-num" text-anchor="start">8</text>
+  <text x="270" y="184" class="pin-label" text-anchor="start">GPIO 14</text>
 
-    <!-- Row 6: Pin 11 (GPIO17 ← TCK), Pin 12 (GPIO18) -->
-    <circle cx="60" cy="170" r="11" class="pin-circle pin-used signal-tck"/><text x="60" y="174" class="pin-num" fill="#fff">11</text>
-    <text x="78" y="174" class="pin-fn-bold signal-tck">GPIO 17  ◄── TCK</text>
-    <circle cx="280" cy="170" r="9" class="pin-circle"/><text x="280" y="174" class="pin-num">12</text>
-    <text x="220" y="174" class="pin-fn" text-anchor="end">GPIO18</text>
+  <!-- Row 5: 9 (GND, USED) / 10 (GPIO15) -->
+  <rect x="206" y="190" width="12" height="12" class="pin-used-gnd" rx="1"/>
+  <text x="195" y="201" class="pin-num c-gnd" text-anchor="end" font-weight="700">9</text>
+  <text x="190" y="201" class="pin-label-bold c-gnd" text-anchor="end">GND — GND</text>
+  <rect x="224" y="192" width="8" height="8" class="pin-pad"/>
+  <text x="252" y="201" class="pin-num" text-anchor="start">10</text>
+  <text x="270" y="201" class="pin-label" text-anchor="start">GPIO 15</text>
 
-    <!-- Row 7: Pin 13 (GPIO27 ← TDO), Pin 14 (GND) -->
-    <circle cx="60" cy="200" r="11" class="pin-circle pin-used signal-tdo"/><text x="60" y="204" class="pin-num" fill="#fff">13</text>
-    <text x="78" y="204" class="pin-fn-bold signal-tdo">GPIO 27  ◄── TDO</text>
-    <circle cx="280" cy="200" r="9" class="pin-circle pin-gnd"/><text x="280" y="204" class="pin-num" fill="#fff">14</text>
-    <text x="220" y="204" class="pin-fn" text-anchor="end">GND</text>
+  <!-- Row 6: 11 (GPIO17 → TCK, USED) / 12 (GPIO18) -->
+  <rect x="206" y="207" width="12" height="12" class="pin-used-tck" rx="1"/>
+  <text x="195" y="218" class="pin-num c-tck" text-anchor="end" font-weight="700">11</text>
+  <text x="190" y="218" class="pin-label-bold c-tck" text-anchor="end">GPIO 17 — TCK</text>
+  <rect x="224" y="209" width="8" height="8" class="pin-pad"/>
+  <text x="252" y="218" class="pin-num" text-anchor="start">12</text>
+  <text x="270" y="218" class="pin-label" text-anchor="start">GPIO 18</text>
 
-    <!-- Row 8: Pin 15 (GPIO22 ← TDI), Pin 16 (GPIO23) -->
-    <circle cx="60" cy="230" r="11" class="pin-circle pin-used signal-tdi"/><text x="60" y="234" class="pin-num" fill="#fff">15</text>
-    <text x="78" y="234" class="pin-fn-bold signal-tdi">GPIO 22  ◄── TDI</text>
-    <circle cx="280" cy="230" r="9" class="pin-circle"/><text x="280" y="234" class="pin-num">16</text>
-    <text x="220" y="234" class="pin-fn" text-anchor="end">GPIO23</text>
+  <!-- Row 7: 13 (GPIO27 → TDO, USED) / 14 (GND) -->
+  <rect x="206" y="224" width="12" height="12" class="pin-used-tdo" rx="1"/>
+  <text x="195" y="235" class="pin-num c-tdo" text-anchor="end" font-weight="700">13</text>
+  <text x="190" y="235" class="pin-label-bold c-tdo" text-anchor="end">GPIO 27 — TDO</text>
+  <rect x="224" y="226" width="8" height="8" class="pin-pad-gnd"/>
+  <text x="252" y="235" class="pin-num" text-anchor="start">14</text>
+  <text x="270" y="235" class="pin-label" text-anchor="start">GND</text>
 
-    <!-- Row 9: Pin 17 (3.3V), Pin 18 (GPIO24) -->
-    <circle cx="60" cy="260" r="9" class="pin-circle pin-power"/><text x="60" y="264" class="pin-num">17</text>
-    <text x="78" y="264" class="pin-fn">3.3V</text>
-    <circle cx="280" cy="260" r="9" class="pin-circle"/><text x="280" y="264" class="pin-num">18</text>
-    <text x="220" y="264" class="pin-fn" text-anchor="end">GPIO24</text>
+  <!-- Row 8: 15 (GPIO22 → TDI, USED) / 16 (GPIO23) -->
+  <rect x="206" y="241" width="12" height="12" class="pin-used-tdi" rx="1"/>
+  <text x="195" y="252" class="pin-num c-tdi" text-anchor="end" font-weight="700">15</text>
+  <text x="190" y="252" class="pin-label-bold c-tdi" text-anchor="end">GPIO 22 — TDI</text>
+  <rect x="224" y="243" width="8" height="8" class="pin-pad"/>
+  <text x="252" y="252" class="pin-num" text-anchor="start">16</text>
+  <text x="270" y="252" class="pin-label" text-anchor="start">GPIO 23</text>
 
-    <!-- Row 10: Pin 19 (GPIO10), Pin 20 (GND) -->
-    <circle cx="60" cy="290" r="9" class="pin-circle"/><text x="60" y="294" class="pin-num">19</text>
-    <text x="78" y="294" class="pin-fn">GPIO10 / MOSI</text>
-    <circle cx="280" cy="290" r="9" class="pin-circle pin-gnd"/><text x="280" y="294" class="pin-num" fill="#fff">20</text>
-    <text x="220" y="294" class="pin-fn" text-anchor="end">GND</text>
+  <!-- Row 9: 17 (3V3) / 18 (GPIO24) -->
+  <rect x="208" y="260" width="8" height="8" class="pin-pad-power"/>
+  <text x="195" y="268" class="pin-num" text-anchor="end">17</text>
+  <text x="190" y="268" class="pin-label" text-anchor="end">3V3</text>
+  <rect x="224" y="260" width="8" height="8" class="pin-pad"/>
+  <text x="252" y="268" class="pin-num" text-anchor="start">18</text>
+  <text x="270" y="268" class="pin-label" text-anchor="start">GPIO 24</text>
 
-    <!-- Rows 11-20 condensed — just a "..." block -->
-    <text x="180" y="338" class="note" text-anchor="middle">⋮</text>
-    <text x="180" y="356" class="note" text-anchor="middle">remaining pins (21..40) not used</text>
-    <text x="180" y="374" class="note" text-anchor="middle">⋮</text>
+  <!-- Row 10: 19 / 20 (GND) -->
+  <rect x="208" y="277" width="8" height="8" class="pin-pad"/>
+  <text x="195" y="285" class="pin-num" text-anchor="end">19</text>
+  <text x="190" y="285" class="pin-label" text-anchor="end">GPIO 10</text>
+  <rect x="224" y="277" width="8" height="8" class="pin-pad-gnd"/>
+  <text x="252" y="285" class="pin-num" text-anchor="start">20</text>
+  <text x="270" y="285" class="pin-label" text-anchor="start">GND</text>
 
-    <!-- A label line at bottom -->
-    <text x="180" y="580" class="note" text-anchor="middle" font-style="italic">(USB-C / power side at top in this orientation)</text>
+  <!-- Rows 11-20 (pins 21..40) — render pin pads only, abbreviated -->
+  <g>
+    <rect x="208" y="294" width="8" height="8" class="pin-pad"/><rect x="224" y="294" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="311" width="8" height="8" class="pin-pad"/><rect x="224" y="311" width="8" height="8" class="pin-pad-gnd"/>
+    <rect x="208" y="328" width="8" height="8" class="pin-pad"/><rect x="224" y="328" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="345" width="8" height="8" class="pin-pad"/><rect x="224" y="345" width="8" height="8" class="pin-pad-gnd"/>
+    <rect x="208" y="362" width="8" height="8" class="pin-pad"/><rect x="224" y="362" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="379" width="8" height="8" class="pin-pad"/><rect x="224" y="379" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="396" width="8" height="8" class="pin-pad"/><rect x="224" y="396" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="413" width="8" height="8" class="pin-pad"/><rect x="224" y="413" width="8" height="8" class="pin-pad-gnd"/>
+    <rect x="208" y="430" width="8" height="8" class="pin-pad"/><rect x="224" y="430" width="8" height="8" class="pin-pad"/>
+    <rect x="208" y="447" width="8" height="8" class="pin-pad"/><rect x="224" y="447" width="8" height="8" class="pin-pad-gnd"/>
+  </g>
+  <text x="195" y="302" class="pin-num" text-anchor="end">21</text>
+  <text x="252" y="455" class="pin-num" text-anchor="start">40</text>
+  <text x="220" y="478" class="note" text-anchor="middle">pins 21..40 unused for JTAG</text>
+
+  <!-- ========== C64U P5 JTAG header (right) ========== -->
+  <text x="880" y="86" class="section-title" text-anchor="middle">Commodore 64 Ultimate — P5 JTAG (10-pin 2×5)</text>
+  <text x="880" y="102" class="h-sub" text-anchor="middle">DLC9LP-compatible pinout — pin 1 marked ▼</text>
+
+  <rect x="850" y="110" width="60" height="200" rx="3" class="pcb"/>
+  <rect x="860" y="118" width="40" height="184" rx="2" class="header-body"/>
+  <polygon points="854,118 860,124 854,130" fill="#fff"/>
+  <text x="844" y="125" class="pin-num" text-anchor="end" fill="#222" font-weight="700">1</text>
+
+  <!-- P5: 5 rows × 2 cols, pitch 32, row 1 y=130, row 5 y=258
+       col1 (odd: 1,3,5,7,9) cx=872, col2 (even: 2,4,6,8,10) cx=888 -->
+
+  <!-- Row tints -->
+  <rect x="720" y="138" width="320" height="22" class="row-bg-used-tck"/>  <!-- pin 1 row -->
+  <rect x="720" y="170" width="320" height="22" class="row-bg-used-tdo"/>  <!-- pin 3 row -->
+  <rect x="720" y="202" width="320" height="22" class="row-bg-used-tms"/>  <!-- pin 5 row -->
+  <rect x="720" y="266" width="320" height="22" class="row-bg-used-tdi"/>  <!-- pin 9 row -->
+
+  <!-- Row 1: pin 1 (TCK) / pin 2 (GND) -->
+  <rect x="866" y="143" width="12" height="12" class="pin-used-tck" rx="1"/>
+  <text x="855" y="154" class="pin-num c-tck" text-anchor="end" font-weight="700">1</text>
+  <text x="843" y="154" class="pin-label-bold c-tck" text-anchor="end">TCK</text>
+  <rect x="882" y="143" width="12" height="12" class="pin-used-gnd" rx="1"/>
+  <text x="905" y="154" class="pin-num c-gnd" text-anchor="start" font-weight="700">2</text>
+  <text x="922" y="154" class="pin-label-bold c-gnd" text-anchor="start">GND</text>
+
+  <!-- Row 2: pin 3 (TDO) / pin 4 (3V3 — FORBIDDEN) -->
+  <rect x="866" y="175" width="12" height="12" class="pin-used-tdo" rx="1"/>
+  <text x="855" y="186" class="pin-num c-tdo" text-anchor="end" font-weight="700">3</text>
+  <text x="843" y="186" class="pin-label-bold c-tdo" text-anchor="end">TDO</text>
+  <rect x="884" y="177" width="8" height="8" class="pin-pad-power"/>
+  <text x="905" y="186" class="pin-num" text-anchor="start">4</text>
+  <text x="922" y="186" class="warn" text-anchor="start">3V3 ✗ (do not connect)</text>
+
+  <!-- Row 3: pin 5 (TMS) / pin 6 (N/C) -->
+  <rect x="866" y="207" width="12" height="12" class="pin-used-tms" rx="1"/>
+  <text x="855" y="218" class="pin-num c-tms" text-anchor="end" font-weight="700">5</text>
+  <text x="843" y="218" class="pin-label-bold c-tms" text-anchor="end">TMS</text>
+  <rect x="884" y="209" width="8" height="8" class="pin-pad"/>
+  <text x="905" y="218" class="pin-num" text-anchor="start">6</text>
+  <text x="922" y="218" class="note" text-anchor="start">N/C</text>
+
+  <!-- Row 4: pin 7 / pin 8 (both N/C) -->
+  <rect x="868" y="241" width="8" height="8" class="pin-pad"/>
+  <text x="855" y="249" class="pin-num" text-anchor="end">7</text>
+  <text x="843" y="249" class="note" text-anchor="end">N/C</text>
+  <rect x="884" y="241" width="8" height="8" class="pin-pad"/>
+  <text x="905" y="249" class="pin-num" text-anchor="start">8</text>
+  <text x="922" y="249" class="note" text-anchor="start">N/C</text>
+
+  <!-- Row 5: pin 9 (TDI) / pin 10 (GND alt) -->
+  <rect x="866" y="271" width="12" height="12" class="pin-used-tdi" rx="1"/>
+  <text x="855" y="282" class="pin-num c-tdi" text-anchor="end" font-weight="700">9</text>
+  <text x="843" y="282" class="pin-label-bold c-tdi" text-anchor="end">TDI</text>
+  <rect x="884" y="273" width="8" height="8" class="pin-pad-gnd"/>
+  <text x="905" y="282" class="pin-num" text-anchor="start">10</text>
+  <text x="922" y="282" class="pin-label" text-anchor="start">GND (alt)</text>
+
+  <!-- ========== Visual divider note between sections ========== -->
+  <text x="550" y="540" class="note" text-anchor="middle" font-style="italic">
+    Each used Pi pin connects to exactly one C64U P5 pin via a single jumper wire — no level-shifter, no ground loop.
+  </text>
+
+  <!-- =================== BOTTOM: connection table (one wire per signal) =================== -->
+  <text x="550" y="580" class="section-title" text-anchor="middle">Connections — one wire per signal</text>
+
+  <!-- Lane y centres: TMS=620, GND=660, TCK=700, TDO=740, TDI=780. Row height 32. -->
+
+  <!-- TMS lane -->
+  <g>
+    <rect x="60"  y="604" width="280" height="32" class="row-bg-used-tms" rx="3"/>
+    <rect x="60"  y="604" width="6"   height="32" class="c-tms"/>
+    <text x="80"  y="624" class="pin-label-bold">Pi pin  7</text>
+    <text x="170" y="624" class="pin-label">GPIO 4</text>
+    <text x="328" y="624" class="pin-label-bold c-tms" text-anchor="end">TMS</text>
+
+    <line x1="345" y1="620" x2="755" y2="620" class="wire-tms" marker-end="url(#ah-tms)"/>
+
+    <rect x="760" y="604" width="280" height="32" class="row-bg-used-tms" rx="3"/>
+    <rect x="760" y="604" width="6"   height="32" class="c-tms"/>
+    <text x="780" y="624" class="pin-label-bold c-tms">TMS</text>
+    <text x="1032" y="624" class="pin-label-bold" text-anchor="end">P5 pin 5</text>
   </g>
 
-  <!-- ============== C64U P5 JTAG header ============== -->
-  <g transform="translate(820, 220)">
-    <text x="100" y="-10" class="title" text-anchor="middle" font-size="16px">C64U P5 JTAG (10-pin 2×5)</text>
-    <text x="100" y="6" class="subtitle" text-anchor="middle">DLC9LP-compatible pinout</text>
+  <!-- GND lane -->
+  <g>
+    <rect x="60"  y="644" width="280" height="32" class="row-bg-used-gnd" rx="3"/>
+    <rect x="60"  y="644" width="6"   height="32" class="c-gnd"/>
+    <text x="80"  y="664" class="pin-label-bold">Pi pin  9</text>
+    <text x="170" y="664" class="pin-label">GND</text>
+    <text x="328" y="664" class="pin-label-bold c-gnd" text-anchor="end">GND</text>
 
-    <rect x="0" y="20" width="200" height="200" class="header-box" rx="6"/>
+    <line x1="345" y1="660" x2="755" y2="660" class="wire-gnd" marker-end="url(#ah-gnd)"/>
+    <text x="550" y="654" class="note" text-anchor="middle" font-style="italic">(any Pi GND will do — 6 / 9 / 14 / 20 / 25 / 30 / 34 / 39)</text>
 
-    <!-- 5 rows × 2 cols. Odd pins on left, even on right. -->
-    <!-- Row 1: pin 1 (TCK), pin 2 (GND) -->
-    <circle cx="40" cy="50" r="11" class="pin-circle pin-used signal-tck"/><text x="40" y="54" class="pin-num" fill="#fff">1</text>
-    <text x="58" y="54" class="pin-fn-bold signal-tck">TCK ──►</text>
-    <circle cx="160" cy="50" r="11" class="pin-circle pin-used pin-gnd"/><text x="160" y="54" class="pin-num" fill="#fff">2</text>
-    <text x="142" y="54" class="pin-fn-bold signal-gnd" text-anchor="end">GND ──►</text>
-
-    <!-- Row 2: pin 3 (TDO), pin 4 -->
-    <circle cx="40" cy="84" r="11" class="pin-circle pin-used signal-tdo"/><text x="40" y="88" class="pin-num" fill="#fff">3</text>
-    <text x="58" y="88" class="pin-fn-bold signal-tdo">TDO ──►</text>
-    <circle cx="160" cy="84" r="9" class="pin-circle pin-power"/><text x="160" y="88" class="pin-num">4</text>
-    <text x="142" y="88" class="pin-fn" text-anchor="end">3.3V (do not connect)</text>
-
-    <!-- Row 3: pin 5 (TMS), pin 6 -->
-    <circle cx="40" cy="118" r="11" class="pin-circle pin-used signal-tms"/><text x="40" y="122" class="pin-num" fill="#fff">5</text>
-    <text x="58" y="122" class="pin-fn-bold signal-tms">TMS ──►</text>
-    <circle cx="160" cy="118" r="9" class="pin-circle"/><text x="160" y="122" class="pin-num">6</text>
-    <text x="142" y="122" class="pin-fn" text-anchor="end">N/C</text>
-
-    <!-- Row 4: pin 7, pin 8 -->
-    <circle cx="40" cy="152" r="9" class="pin-circle"/><text x="40" y="156" class="pin-num">7</text>
-    <text x="58" y="156" class="pin-fn">N/C</text>
-    <circle cx="160" cy="152" r="9" class="pin-circle"/><text x="160" y="156" class="pin-num">8</text>
-    <text x="142" y="156" class="pin-fn" text-anchor="end">N/C</text>
-
-    <!-- Row 5: pin 9 (TDI), pin 10 (GND) -->
-    <circle cx="40" cy="186" r="11" class="pin-circle pin-used signal-tdi"/><text x="40" y="190" class="pin-num" fill="#fff">9</text>
-    <text x="58" y="190" class="pin-fn-bold signal-tdi">TDI ──►</text>
-    <circle cx="160" cy="186" r="11" class="pin-circle pin-gnd"/><text x="160" y="190" class="pin-num" fill="#fff">10</text>
-    <text x="142" y="190" class="pin-fn signal-gnd" text-anchor="end">GND (alt)</text>
+    <rect x="760" y="644" width="280" height="32" class="row-bg-used-gnd" rx="3"/>
+    <rect x="760" y="644" width="6"   height="32" class="c-gnd"/>
+    <text x="780" y="664" class="pin-label-bold c-gnd">GND</text>
+    <text x="1032" y="664" class="pin-label-bold" text-anchor="end">P5 pin 2 (or 10)</text>
   </g>
 
-  <!-- ============== Wires (Pi → C64U) ============== -->
-  <!-- TMS: Pi pin 7 (cx=120, cy=210) → C64U P5 pin 5 (cx=860, cy=338) -->
-  <path class="wire-tms" d="M 132 210 C 380 210, 600 338, 848 338"/>
-  <!-- TCK: Pi pin 11 (cx=120, cy=270) → C64U P5 pin 1 (cx=860, cy=270) -->
-  <path class="wire-tck" d="M 132 270 C 400 270, 600 270, 848 270"/>
-  <!-- TDO: Pi pin 13 (cx=120, cy=300) → C64U P5 pin 3 (cx=860, cy=304) -->
-  <path class="wire-tdo" d="M 132 300 C 400 300, 600 304, 848 304"/>
-  <!-- TDI: Pi pin 15 (cx=120, cy=330) → C64U P5 pin 9 (cx=860, cy=406) -->
-  <path class="wire-tdi" d="M 132 330 C 400 330, 600 406, 848 406"/>
-  <!-- GND: Pi pin 9 (cx=120, cy=240) → C64U P5 pin 2 (cx=980, cy=270) [or pin 10 cy=406] -->
-  <path class="wire-gnd" d="M 132 240 C 400 240, 700 270, 968 270"/>
+  <!-- TCK lane -->
+  <g>
+    <rect x="60"  y="684" width="280" height="32" class="row-bg-used-tck" rx="3"/>
+    <rect x="60"  y="684" width="6"   height="32" class="c-tck"/>
+    <text x="80"  y="704" class="pin-label-bold">Pi pin 11</text>
+    <text x="170" y="704" class="pin-label">GPIO 17</text>
+    <text x="328" y="704" class="pin-label-bold c-tck" text-anchor="end">TCK</text>
 
-  <!-- ============== Legend ============== -->
-  <g transform="translate(60, 660)">
-    <text x="0" y="0" class="title" font-size="14px">Legend</text>
-    <line x1="0" y1="20" x2="40" y2="20" class="wire-tck"/>
-    <text x="48" y="24" class="legend-text"><tspan class="signal-tck" font-weight="700">TCK</tspan>  Test Clock</text>
-    <line x1="160" y1="20" x2="200" y2="20" class="wire-tms"/>
-    <text x="208" y="24" class="legend-text"><tspan class="signal-tms" font-weight="700">TMS</tspan>  Test Mode Select</text>
-    <line x1="340" y1="20" x2="380" y2="20" class="wire-tdi"/>
-    <text x="388" y="24" class="legend-text"><tspan class="signal-tdi" font-weight="700">TDI</tspan>  Test Data In</text>
-    <line x1="510" y1="20" x2="550" y2="20" class="wire-tdo"/>
-    <text x="558" y="24" class="legend-text"><tspan class="signal-tdo" font-weight="700">TDO</tspan>  Test Data Out</text>
-    <line x1="690" y1="20" x2="730" y2="20" class="wire-gnd"/>
-    <text x="738" y="24" class="legend-text"><tspan class="signal-gnd" font-weight="700">GND</tspan>  Ground</text>
+    <line x1="345" y1="700" x2="755" y2="700" class="wire-tck" marker-end="url(#ah-tck)"/>
+
+    <rect x="760" y="684" width="280" height="32" class="row-bg-used-tck" rx="3"/>
+    <rect x="760" y="684" width="6"   height="32" class="c-tck"/>
+    <text x="780" y="704" class="pin-label-bold c-tck">TCK</text>
+    <text x="1032" y="704" class="pin-label-bold" text-anchor="end">P5 pin 1</text>
   </g>
 
-  <!-- ============== Warning ============== -->
-  <g transform="translate(60, 700)">
-    <text x="0" y="14" class="warn">⚠ DO NOT CONNECT 3.3V (Pi pin 1 or 17) to C64U P5 pin 4 — back-feeds C64U PSU.</text>
-    <text x="0" y="34" class="note">Use either Pi pin 9 OR pin 14 OR pin 20 for GND. Use either C64U P5 pin 2 OR pin 10 for GND. One is enough.</text>
+  <!-- TDO lane -->
+  <g>
+    <rect x="60"  y="724" width="280" height="32" class="row-bg-used-tdo" rx="3"/>
+    <rect x="60"  y="724" width="6"   height="32" class="c-tdo"/>
+    <text x="80"  y="744" class="pin-label-bold">Pi pin 13</text>
+    <text x="170" y="744" class="pin-label">GPIO 27</text>
+    <text x="328" y="744" class="pin-label-bold c-tdo" text-anchor="end">TDO</text>
+
+    <line x1="345" y1="740" x2="755" y2="740" class="wire-tdo" marker-end="url(#ah-tdo)"/>
+
+    <rect x="760" y="724" width="280" height="32" class="row-bg-used-tdo" rx="3"/>
+    <rect x="760" y="724" width="6"   height="32" class="c-tdo"/>
+    <text x="780" y="744" class="pin-label-bold c-tdo">TDO</text>
+    <text x="1032" y="744" class="pin-label-bold" text-anchor="end">P5 pin 3</text>
+  </g>
+
+  <!-- TDI lane -->
+  <g>
+    <rect x="60"  y="764" width="280" height="32" class="row-bg-used-tdi" rx="3"/>
+    <rect x="60"  y="764" width="6"   height="32" class="c-tdi"/>
+    <text x="80"  y="784" class="pin-label-bold">Pi pin 15</text>
+    <text x="170" y="784" class="pin-label">GPIO 22</text>
+    <text x="328" y="784" class="pin-label-bold c-tdi" text-anchor="end">TDI</text>
+
+    <line x1="345" y1="780" x2="755" y2="780" class="wire-tdi" marker-end="url(#ah-tdi)"/>
+
+    <rect x="760" y="764" width="280" height="32" class="row-bg-used-tdi" rx="3"/>
+    <rect x="760" y="764" width="6"   height="32" class="c-tdi"/>
+    <text x="780" y="784" class="pin-label-bold c-tdi">TDI</text>
+    <text x="1032" y="784" class="pin-label-bold" text-anchor="end">P5 pin 9</text>
+  </g>
+
+  <!-- Warning row: 3.3V forbidden -->
+  <g>
+    <rect x="60"  y="828" width="980" height="40" class="row-bg-warn" rx="3"/>
+    <text x="76"  y="844" class="warn">⚠ DO NOT CONNECT 3.3V</text>
+    <text x="76"  y="862" class="note">Pi pin 1 / 17 (3V3) ✗ P5 pin 4 (3V3) — back-feeds the C64U from the Pi's 3.3V rail and can damage the board.</text>
+  </g>
+
+  <!-- ========== Legend ========== -->
+  <g transform="translate(60, 900)">
+    <text x="0" y="0" class="section-title" font-size="14px">Legend</text>
+    <line x1="0"   y1="22" x2="40"  y2="22" class="wire-tck"/>
+    <text x="48"   y="26" class="legend-text"><tspan class="c-tck" font-weight="700">TCK</tspan> Test Clock</text>
+    <line x1="180" y1="22" x2="220" y2="22" class="wire-tms"/>
+    <text x="228"  y="26" class="legend-text"><tspan class="c-tms" font-weight="700">TMS</tspan> Test Mode Select</text>
+    <line x1="380" y1="22" x2="420" y2="22" class="wire-tdi"/>
+    <text x="428"  y="26" class="legend-text"><tspan class="c-tdi" font-weight="700">TDI</tspan> Test Data In</text>
+    <line x1="560" y1="22" x2="600" y2="22" class="wire-tdo"/>
+    <text x="608"  y="26" class="legend-text"><tspan class="c-tdo" font-weight="700">TDO</tspan> Test Data Out</text>
+    <line x1="760" y1="22" x2="800" y2="22" class="wire-gnd"/>
+    <text x="808"  y="26" class="legend-text"><tspan class="c-gnd" font-weight="700">GND</tspan> Ground (dashed)</text>
   </g>
 </svg>

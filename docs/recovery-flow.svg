@@ -1,120 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 980" font-family="Helvetica, Arial, sans-serif">
   <style>
     .title { font-size: 22px; font-weight: 700; }
-    .subtitle { font-size: 14px; fill: #555; }
-    .stage-box { fill: #fff; stroke: #222; stroke-width: 2; rx: 8; }
-    .stage-title { font-size: 16px; font-weight: 700; }
-    .stage-body { font-size: 12px; fill: #444; }
-    .ok-box { fill: #e9f7ee; stroke: #27a25c; stroke-width: 2; }
-    .warn-box { fill: #fdf2e2; stroke: #d4a35d; stroke-width: 2; }
-    .danger-box { fill: #fdedef; stroke: #c0392b; stroke-width: 2; }
-    .arrow { stroke: #444; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
-    .arrow-success { stroke: #27a25c; stroke-width: 2; fill: none; marker-end: url(#arrowhead-green); }
-    .layer-label { font-size: 11px; font-weight: 700; fill: #888; text-anchor: middle; }
-    .layer-row { fill: #f4f4f4; stroke: #ccc; stroke-dasharray: 3,3; }
-    .volatile { font-size: 10px; fill: #1f77b4; font-style: italic; }
-    .persistent { font-size: 10px; fill: #c0392b; font-style: italic; }
+    .subtitle { font-size: 13px; fill: #555; }
+
+    .stage-box { fill: #fff; stroke: #444; stroke-width: 1.5; rx: 8; }
+    .stage-num { font-size: 11px; font-weight: 700; fill: #888; letter-spacing: 1px; }
+    .stage-title { font-size: 18px; font-weight: 700; fill: #111; }
+    .stage-body { font-size: 12px; fill: #333; }
+    .stage-mono { font-size: 11px; font-family: "DejaVu Sans Mono", monospace; fill: #555; }
+
+    .ok-tint     { fill: #f3f9f5; stroke: #27a25c; }
+    .info-tint   { fill: #f3f7fc; stroke: #4a90c0; }
+    .warn-tint   { fill: #fdf6e9; stroke: #d4a35d; }
+    .danger-tint { fill: #fdedef; stroke: #c0392b; stroke-width: 2.5; }
+
+    .arrow      { stroke: #555;    stroke-width: 2.5; fill: none; marker-end: url(#ah-grey); }
+    .arrow-ok   { stroke: #27a25c; stroke-width: 2.5; fill: none; marker-end: url(#ah-green); }
+    .arrow-warn { stroke: #c0392b; stroke-width: 2.5; fill: none; marker-end: url(#ah-red); }
+
+    .arrow-label { font-size: 12px; fill: #333; font-style: italic; }
+    .arrow-label-ok { font-size: 12px; fill: #1a7a45; font-style: italic; font-weight: 700; }
+    .arrow-mono { font-size: 11px; fill: #1a7a45; font-family: "DejaVu Sans Mono", monospace; font-weight: 700; }
+
+    .side-bracket { stroke: #888; stroke-width: 1.5; fill: none; }
+    .side-label { font-size: 11px; font-weight: 700; fill: #555; }
+    .side-sub { font-size: 10px; fill: #888; }
+
+    .footnote { font-size: 12px; fill: #444; }
+    .footnote-warn { font-size: 12px; fill: #c0392b; font-weight: 700; }
   </style>
 
   <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <polygon points="0 0, 10 5, 0 10" fill="#444"/>
+    <marker id="ah-grey" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#555"/>
     </marker>
-    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+    <marker id="ah-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
       <polygon points="0 0, 10 5, 0 10" fill="#27a25c"/>
+    </marker>
+    <marker id="ah-red" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#c0392b"/>
     </marker>
   </defs>
 
-  <!-- Title -->
+  <!-- ========== TITLE ========== -->
   <text x="550" y="32" class="title" text-anchor="middle">Commodore 64 Ultimate / Ultimate 64 Elite II — JTAG recovery flow</text>
-  <text x="550" y="54" class="subtitle" text-anchor="middle">Stages 0-2 are volatile (RAM-only). Stage 3 (run from menu) is the persistent fix.</text>
+  <text x="550" y="54" class="subtitle" text-anchor="middle">Stages 0-2 are volatile (power-cycle reverts). Stage 3 is the permanent fix.</text>
 
-  <!-- Layer rows -->
-  <rect x="20" y="100" width="1060" height="60" class="layer-row"/>
-  <text x="40" y="135" class="layer-label">Pi GPIO</text>
+  <!-- Stages live in central column x=180..760 (width 580). -->
+  <!-- Side annotations live at x=790..1080 (width 290). -->
 
-  <rect x="20" y="180" width="1060" height="120" class="layer-row"/>
-  <text x="40" y="225" class="layer-label">FPGA fabric</text>
-  <text x="40" y="245" class="volatile" text-anchor="middle">(volatile)</text>
+  <!-- ========== Stage 0: smoke test ========== -->
+  <rect x="180" y="100" width="580" height="80" class="stage-box ok-tint"/>
+  <text x="200" y="124" class="stage-num">STAGE 0  ·  read-only smoke test</text>
+  <text x="200" y="148" class="stage-title">Chain test</text>
+  <text x="200" y="170" class="stage-body">
+    <tspan class="stage-mono">xc3sprog -c matrix_creator -j</tspan>  →  reads JTAG IDCODE  <tspan class="stage-mono">0x0362c093</tspan>  (XC7A50T)
+  </text>
 
-  <rect x="20" y="320" width="1060" height="80" class="layer-row"/>
-  <text x="40" y="365" class="layer-label">RISC-V DRAM</text>
-  <text x="40" y="385" class="volatile" text-anchor="middle">(volatile)</text>
+  <!-- arrow 0 → 1 -->
+  <line x1="470" y1="180" x2="470" y2="220" class="arrow-ok"/>
+  <text x="490" y="204" class="arrow-label-ok">✓ chain works — wiring confirmed</text>
 
-  <rect x="20" y="420" width="1060" height="80" class="layer-row"/>
-  <text x="40" y="465" class="layer-label">Flash partitions</text>
-  <text x="40" y="485" class="persistent" text-anchor="middle">(PERSISTENT)</text>
+  <!-- ========== Stage 1: FPGA load ========== -->
+  <rect x="180" y="225" width="580" height="100" class="stage-box info-tint"/>
+  <text x="200" y="249" class="stage-num">STAGE 1  ·  FPGA fabric (volatile)</text>
+  <text x="200" y="273" class="stage-title">Load recovery bitstream</text>
+  <text x="200" y="295" class="stage-body">
+    <tspan class="stage-mono">openFPGALoader</tspan> or <tspan class="stage-mono">xc3sprog</tspan>  →  programs <tspan class="stage-mono">u64_mk2_artix.bit</tspan>  into the Artix-7 FPGA fabric
+  </text>
+  <text x="200" y="313" class="stage-body" font-style="italic" fill="#4a90c0">→ BSCANE2 user-side bridge becomes accessible over JTAG (USER4 IR)</text>
 
-  <!-- ============ Stage 0: Smoke test (read IDCODE) ============ -->
-  <rect x="100" y="105" width="200" height="50" class="stage-box ok-box"/>
-  <text x="200" y="125" class="stage-title" text-anchor="middle">Stage 0</text>
-  <text x="200" y="142" class="stage-body" text-anchor="middle">read IDCODE via xc3sprog</text>
-  <text x="200" y="155" class="stage-body" text-anchor="middle" font-style="italic">read-only — no writes</text>
+  <!-- arrow 1 → 2 -->
+  <line x1="470" y1="325" x2="470" y2="365" class="arrow-ok"/>
+  <text x="490" y="350" class="arrow-label-ok">✓ FPGA configured</text>
 
-  <!-- ============ Stage 1: FPGA load ============ -->
-  <rect x="350" y="185" width="200" height="110" class="stage-box"/>
-  <text x="450" y="205" class="stage-title" text-anchor="middle">Stage 1</text>
-  <text x="450" y="223" class="stage-body" text-anchor="middle">openFPGALoader / xc3sprog</text>
-  <text x="450" y="240" class="stage-body" text-anchor="middle">load u64_mk2_artix.bit</text>
-  <text x="450" y="263" class="stage-body" text-anchor="middle">→ Recovery FPGA fabric</text>
-  <text x="450" y="278" class="stage-body" text-anchor="middle" font-style="italic">(BSCANE2 user bridge live)</text>
+  <!-- ========== Stage 2: DRAM upload + boot ========== -->
+  <rect x="180" y="370" width="580" height="120" class="stage-box info-tint"/>
+  <text x="200" y="394" class="stage-num">STAGE 2  ·  RISC-V DRAM (volatile)</text>
+  <text x="200" y="418" class="stage-title">Upload firmware + boot</text>
+  <text x="200" y="440" class="stage-body">
+    <tspan class="stage-mono">recover.py ultimate.bin</tspan>  via the BSCANE2 bridge:
+  </text>
+  <text x="220" y="458" class="stage-body">1. assert RISC-V reset  →  2. stream ~960 KB of <tspan class="stage-mono">ultimate.bin</tspan> to DRAM at <tspan class="stage-mono">0x30000</tspan></text>
+  <text x="220" y="476" class="stage-body">3. write boot magic <tspan class="stage-mono">0x1571BABE</tspan> at <tspan class="stage-mono">0xFFFC</tspan>  →  4. release reset (CPU jumps to DRAM)</text>
 
-  <!-- ============ Stage 2: DRAM upload + boot ============ -->
-  <rect x="600" y="325" width="200" height="80" class="stage-box"/>
-  <text x="700" y="345" class="stage-title" text-anchor="middle">Stage 2</text>
-  <text x="700" y="363" class="stage-body" text-anchor="middle">recover.py</text>
-  <text x="700" y="378" class="stage-body" text-anchor="middle">upload ultimate.bin → DRAM</text>
-  <text x="700" y="393" class="stage-body" text-anchor="middle">+ boot magic + release reset</text>
+  <!-- arrow 2 → bridge confirm -->
+  <line x1="470" y1="490" x2="470" y2="530" class="arrow-ok"/>
+  <text x="490" y="515" class="arrow-mono">→ bridge IDCODE = 0xdead1541</text>
 
-  <!-- Stage 2.5: bridge confirms boot -->
-  <rect x="850" y="325" width="220" height="60" class="stage-box ok-box"/>
-  <text x="960" y="345" class="stage-title" text-anchor="middle" fill="#27a25c">✓ 0xdead1541</text>
-  <text x="960" y="365" class="stage-body" text-anchor="middle">bridge IDCODE confirms</text>
-  <text x="960" y="378" class="stage-body" text-anchor="middle">recovery firmware booted</text>
+  <!-- ========== Boot confirmation ========== -->
+  <rect x="180" y="535" width="580" height="68" class="stage-box ok-tint"/>
+  <text x="470" y="563" class="stage-title" text-anchor="middle" fill="#27a25c">✓  Recovery firmware booted</text>
+  <text x="470" y="587" class="stage-body" text-anchor="middle">Gideon's deliberate <tspan class="stage-mono" fill="#27a25c" font-weight="700">0xdead1541</tspan> "booted" signature confirmed via JTAG.  HDMI recovery menu now appears.</text>
 
-  <!-- ============ Stage 3: Permanent flash ============ -->
-  <rect x="350" y="425" width="380" height="70" class="stage-box danger-box"/>
-  <text x="540" y="445" class="stage-title" text-anchor="middle">Stage 3 — DON'T SKIP</text>
-  <text x="540" y="463" class="stage-body" text-anchor="middle">From recovered menu, run a known-good update.ue2 from USB stick</text>
-  <text x="540" y="478" class="stage-body" text-anchor="middle">→ writes FPGA + ROMs + ESP32 + ultimate.app + HTML to flash (PERMANENT)</text>
+  <!-- arrow boot → stage 3 -->
+  <line x1="470" y1="603" x2="470" y2="643" class="arrow"/>
+  <text x="490" y="628" class="arrow-label">menu visible on HDMI — eject any nonsense, insert known-good update.ue2</text>
 
-  <!-- ============ Arrows between stages ============ -->
-  <!-- Stage 0 → Stage 1 -->
-  <path class="arrow-success" d="M 200 158 C 200 180, 350 180, 350 220"/>
-  <text x="285" y="180" class="stage-body" font-style="italic" fill="#27a25c">✓ chain works</text>
+  <!-- ========== Stage 3: PERMANENT flash ========== -->
+  <rect x="180" y="648" width="580" height="120" class="stage-box danger-tint"/>
+  <text x="200" y="672" class="stage-num" fill="#c0392b">STAGE 3  ·  Q-SPI flash (PERSISTENT — DON'T SKIP)</text>
+  <text x="200" y="696" class="stage-title" fill="#c0392b">Permanent restore</text>
+  <text x="200" y="718" class="stage-body">From the recovered HDMI menu, navigate to a known-good <tspan class="stage-mono">update.ue2</tspan> and run it.</text>
+  <text x="200" y="736" class="stage-body">→ writes runtime FPGA, KERNAL/BASIC/1541/1571/1581/SD ROMs, ESP32 firmware,</text>
+  <text x="200" y="754" class="stage-body">   <tspan class="stage-mono">ultimate.app</tspan>, web HTML to flash. Takes ~3-5 minutes; auto-reboots when done.</text>
 
-  <!-- Stage 1 → Stage 2 -->
-  <path class="arrow-success" d="M 450 298 C 450 320, 600 360, 600 365"/>
-  <text x="540" y="318" class="stage-body" font-style="italic" fill="#27a25c">✓ FPGA configured</text>
+  <!-- arrow 3 → recovered -->
+  <line x1="470" y1="768" x2="470" y2="808" class="arrow-ok"/>
+  <text x="490" y="793" class="arrow-label-ok">flash written  →  auto-reboot</text>
 
-  <!-- Stage 2 → bridge confirm -->
-  <path class="arrow-success" d="M 800 365 L 850 355"/>
+  <!-- ========== Recovered ========== -->
+  <rect x="180" y="813" width="580" height="68" class="stage-box ok-tint"/>
+  <text x="470" y="841" class="stage-title" text-anchor="middle" fill="#27a25c">Recovered ✓</text>
+  <text x="470" y="865" class="stage-body" text-anchor="middle">Device boots normally on its own firmware. Power-cycle freely. JTAG cable can be removed.</text>
 
-  <!-- Stage 2 (HDMI) → Stage 3 -->
-  <path class="arrow" d="M 700 408 C 700 425, 600 460, 540 425"/>
-  <text x="610" y="425" class="stage-body" font-style="italic">menu visible on HDMI</text>
-
-  <!-- Stage 3 outcome (auto-reboot) -->
-  <rect x="780" y="425" width="200" height="70" class="stage-box ok-box"/>
-  <text x="880" y="445" class="stage-title" text-anchor="middle" fill="#27a25c">Recovered ✓</text>
-  <text x="880" y="463" class="stage-body" text-anchor="middle">Device reboots normally;</text>
-  <text x="880" y="478" class="stage-body" text-anchor="middle">JTAG cable can be removed</text>
-  <path class="arrow-success" d="M 730 460 L 780 460"/>
-
-  <!-- ============ "What gets touched" annotations ============ -->
-  <g transform="translate(20, 535)">
-    <text x="0" y="0" class="stage-title" font-size="14px">What each stage actually writes</text>
-    <text x="0" y="20" class="stage-body">
-      <tspan font-weight="700">Stage 0:</tspan> nothing (read-only IDCODE).
-      <tspan font-weight="700"> Stage 1:</tspan> FPGA fabric only — volatile, reverts on power-cycle.
-    </text>
-    <text x="0" y="38" class="stage-body">
-      <tspan font-weight="700">Stage 2:</tspan> DRAM only — volatile, reverts on power-cycle.
-      <tspan font-weight="700"> Stage 3:</tspan> Q-SPI flash — PERMANENT.
-    </text>
-    <text x="0" y="60" class="stage-body" fill="#c0392b" font-weight="700">
-      Until Stage 3 completes, every power-cycle reverts the device to its bricked flash state.
-    </text>
+  <!-- ========== Right side: volatility annotations ========== -->
+  <!-- Volatile bracket spans Stage 0..Stage 2 → confirmation (y=100..603) -->
+  <g transform="translate(790, 0)">
+    <path class="side-bracket" d="M 0 110, L -8 110, L -8 595, L 0 595"/>
+    <text x="6" y="280" class="side-label">VOLATILE</text>
+    <text x="6" y="296" class="side-sub">power-cycle reverts</text>
+    <text x="6" y="312" class="side-sub">device to its previous</text>
+    <text x="6" y="328" class="side-sub">(bricked) flash state.</text>
+    <text x="6" y="352" class="side-sub" font-style="italic">Stages 0-2 only</text>
+    <text x="6" y="368" class="side-sub" font-style="italic">touch FPGA fabric</text>
+    <text x="6" y="384" class="side-sub" font-style="italic">and DRAM — neither</text>
+    <text x="6" y="400" class="side-sub" font-style="italic">survives a reboot.</text>
   </g>
+
+  <!-- Persistent bracket spans Stage 3..Recovered (y=648..881) -->
+  <g transform="translate(790, 0)">
+    <path class="side-bracket" stroke="#c0392b" d="M 0 658, L -8 658, L -8 875, L 0 875"/>
+    <text x="6" y="740" class="side-label" fill="#c0392b">PERSISTENT</text>
+    <text x="6" y="756" class="side-sub">writes Q-SPI flash;</text>
+    <text x="6" y="772" class="side-sub">survives power-cycle.</text>
+    <text x="6" y="796" class="side-sub" font-style="italic">Until you complete</text>
+    <text x="6" y="812" class="side-sub" font-style="italic">Stage 3, every reboot</text>
+    <text x="6" y="828" class="side-sub" font-style="italic">drops back into the</text>
+    <text x="6" y="844" class="side-sub" font-style="italic">bricked state.</text>
+  </g>
+
+  <!-- ========== Footnote ========== -->
+  <text x="550" y="920" class="footnote" text-anchor="middle">
+    What each stage actually writes:  Stage 0 — nothing (read-only).  Stage 1 — FPGA fabric.  Stage 2 — DRAM.  Stage 3 — Q-SPI flash.
+  </text>
+  <text x="550" y="942" class="footnote-warn" text-anchor="middle">
+    Until Stage 3 completes, every power-cycle reverts the device to its bricked flash state.
+  </text>
 </svg>
