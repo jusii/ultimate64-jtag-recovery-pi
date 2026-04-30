@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1020" font-family="Helvetica, Arial, sans-serif">
+  <!-- White canvas — keeps the diagram readable under GitHub dark mode -->
+  <rect x="0" y="0" width="1100" height="1020" fill="#ffffff"/>
   <style>
     text { fill: #222; }
     .title { font-size: 22px; font-weight: 700; }
