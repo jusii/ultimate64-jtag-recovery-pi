@@ -273,7 +273,10 @@ PRs and issues welcome. Useful contributions:
 - USB Blaster / OpenOCD-based variant for non-Pi setups
 - Documentation improvements (especially photos of the wiring on different revisions)
 
-If your recovery succeeded with this tool, leaving a comment on [upstream issue #537](https://github.com/GideonZ/1541ultimate/issues/537) saying "Pi-GPIO recovery worked, ref: <this repo>" with your hardware revision helps others find it.
+This is an **unofficial** community port. Please don't open issues against
+upstream `GideonZ/1541ultimate` about this tool — Gideon already maintains
+the official FT232H-based recovery and shouldn't have to triage Pi-GPIO
+support questions on top of that. Open issues here instead.
 
 ## Keeping the bundled recovery artifacts current
 
