@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.idea/
+.vscode/
+
+# Internal handoff / publishing-prep notes — not for the public repo
+_SESSION_RESUME.md
+.github-repo-metadata.md
