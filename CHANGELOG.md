@@ -24,3 +24,9 @@
   detail.
 - Default GPIO pin assignments match xc3sprog's `matrix_creator` cable
   and LinuxJedi's 2025 Pi-JTAG layout: TMS=4, TCK=17, TDI=22, TDO=27.
+- GPIO library: `RPi.GPIO` via Raspberry Pi OS's apt package
+  `python3-rpi.gpio` (Bookworm-patched 0.7.1~a4 build). Initial attempt
+  was libgpiod via `python-gpiod` — that apt package doesn't exist on
+  Bookworm under that name, and the PyPI `gpiod` v1→v2 API change made
+  drop-in use awkward, so we fell back to RPi.GPIO. Tested on Raspberry
+  Pi OS Bookworm (Debian 12) / kernel 6.6.31 / Python 3.11.2.

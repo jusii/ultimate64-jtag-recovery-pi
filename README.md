@@ -37,6 +37,29 @@ If you don't already own an FT232H breakout, options after a brick are:
 1. **Wait 2-5 days** for one to arrive (Mouser, Farnell, Adafruit) — fine if you're patient.
 2. **Use a Raspberry Pi**, which most Commodore homebrew folk already have wired up for Xilinx programming. → that's this repo.
 
+## Tested on
+
+The successful 2026-04-29 recovery was run on:
+
+- **Raspberry Pi 4** (any 40-pin model should work; tested on a Pi running Raspberry Pi OS aarch64)
+- **Raspberry Pi OS Bookworm** (Debian 12), kernel 6.6.31
+- **Python 3.11.2**
+- **`python3-rpi.gpio` 0.7.1~a4-1+b2** (the Raspberry Pi Foundation's Bookworm-patched build of RPi.GPIO, installed via apt)
+- `xc3sprog` and `openFPGALoader` from apt for Stage 1
+
+> ⚠ **GPIO-library gotcha on Bookworm.** Our first attempt was to drive the
+> JTAG via libgpiod's Python bindings — but `apt install python-gpiod`
+> doesn't exist (the package is named `python3-libgpiod`), and the PyPI
+> `gpiod` API has changed enough between v1 and v2 that what worked on
+> Bullseye doesn't drop in cleanly. We fell back to `RPi.GPIO` via the
+> apt-installed `python3-rpi.gpio` package, which the Pi Foundation has
+> patched specifically for Bookworm — that one Just Worked. **Do not
+> `pip install RPi.GPIO`** on Bookworm; the upstream PyPI version is older
+> and broken on the new kernel. Use `sudo apt install python3-rpi.gpio`.
+
+If you're on a Pi 5 or a non-Raspberry-Pi-OS distro, your mileage may vary;
+the apt-package gotcha above is the most-likely thing to bite.
+
 ## Quick start
 
 You'll need:
@@ -116,7 +139,7 @@ TDO_PIN = 27
 ├── README.md          ← this file
 ├── LICENSE            ← GPLv3 (matches upstream)
 ├── CHANGELOG.md
-├── recover.py         ← Stage 2: Python tool, libgpiod via RPi.GPIO
+├── recover.py         ← Stage 2: Python tool, GPIO via RPi.GPIO
 ├── soft_reset.py      ← bonus: soft-reset the RISC-V via JTAG bridge
 ├── 01_test_chain.sh   ← Stage 0: read IDCODE via xc3sprog (smoke test)
 ├── 02_load_fpga.sh    ← Stage 1: program u64_mk2_artix.bit into FPGA fabric
@@ -199,6 +222,8 @@ After reboot you're on permanently-flashed working firmware. **Now you can power
 
 ## Troubleshooting
 
+**`ImportError: No module named RPi.GPIO`** (or `RPi.GPIO not available` from `recover.py`) → on Raspberry Pi OS Bookworm, install via apt, **not** pip: `sudo apt install python3-rpi.gpio`. The PyPI version is older and won't import correctly under Bookworm's newer kernel. Don't be tempted to try `apt install python-gpiod` either — that's not the right package name (the libgpiod Python binding is `python3-libgpiod`, with a different API).
+
 **`./01_test_chain.sh` returns no chain / all-zeros / all-ones** → wiring issue. Check pin numbers, ground continuity, that the C64U is powered on (rocker up, not just standby).
 
 **`xc3sprog -c matrix_creator -j` works on your Pi but `01_test_chain.sh` doesn't** → cable name varies between xc3sprog builds. Try `CABLE=matrix_creator ./01_test_chain.sh` or check `xc3sprog 2>&1 | grep -E "creator|gpio|sysfs"` for what's available.
@@ -243,8 +268,8 @@ This tool would not exist without:
 PRs and issues welcome. Useful contributions:
 
 - Additional cable/pinout mappings (different Pi-to-JTAG wirings)
-- Support for Pi 5 (gpiochip4) — the script defaults to gpiochip0 which is correct for Pi 1-4
-- Older Raspberry Pi OS support (libgpiod v1 instead of RPi.GPIO)
+- Support for Pi 5 — the current code uses `RPi.GPIO`, which has limitations on Pi 5; an `lgpio` or `python3-libgpiod` (v2 API) backend would be a welcome PR
+- Older Raspberry Pi OS support (Bullseye / pre-Bookworm) — likely needs the upstream PyPI `RPi.GPIO`, since the Foundation's Bookworm-patched apt build is bookworm-specific
 - USB Blaster / OpenOCD-based variant for non-Pi setups
 - Documentation improvements (especially photos of the wiring on different revisions)
 

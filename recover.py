@@ -89,7 +89,7 @@ log.addHandler(_h)
 
 
 class JtagBitbang:
-    """Minimal JTAG state machine + IR/DR scan over Pi GPIO via libgpiod."""
+    """Minimal JTAG state machine + IR/DR scan over Pi GPIO via RPi.GPIO."""
 
     # JTAG TAP states we use
     TLR, RTI, SDR, EX1DR, PDR, SIR, EX1IR, PIR = range(8)
